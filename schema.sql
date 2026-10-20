@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS participants (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, suffix TEXT NOT NULL, points INTEGER NOT NULL, created_at TEXT DEFAULT (datetime('now')));
+CREATE UNIQUE INDEX IF NOT EXISTS person_once ON participants(name COLLATE NOCASE, suffix);

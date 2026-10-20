@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#a80f19">
+    <meta name="description" content="Tentez votre chance à la roulette des points Dinice.X Pizza.">
+    <title>Roulette des points | Dinice.X Pizza</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Montserrat:ital,wght@0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <div class="page-glow page-glow--one" aria-hidden="true"></div>
+    <div class="page-glow page-glow--two" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Dinice.X Pizza — accueil">
+        <span class="logo">
+          <img src="/logo.png" alt="Logo Dinice.X Pizza" onerror="this.style.display='none';this.nextElementSibling.hidden=false">
+          <span hidden>DX</span>
+        </span>
+        <span class="brand__copy">
+          <b>DINICE.X PIZZA</b>
+          <small>Le plaisir de jouer, la joie de gagner</small>
+        </span>
+      </a>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow"><span></span> Défi du jour · Grand final <span></span></p>
+        <h1 id="page-title">La roulette<br><em>des points.</em></h1>
+        <p class="hero__intro">Fais tourner la roue Dinice.X Pizza et découvre la cote qui t’est réservée. Une participation par personne.</p>
+      </section>
+
+      <section class="game-card" aria-label="Roulette des points">
+        <div class="wheel-stage">
+          <div class="wheel-halo" aria-hidden="true"></div>
+          <p class="wheel-stage__hint">Chaque tour révèle ta cote</p>
+          <div class="wheelbox">
+            <div class="pointer" aria-hidden="true"><i></i></div>
+            <div id="wheel" class="wheel" role="img" aria-label="Roue composée de six cases : 5, 10, 15, 20, 30 et 50 points.">
+              <div class="wheel__rim" aria-hidden="true"></div>
+              <div id="wheelLabels" class="wheel__labels" aria-hidden="true"></div>
+              <div class="wheel__center" aria-hidden="true"><span>DX</span><small>PLAY</small></div>
+            </div>
+          </div>
+          <div class="wheel-stage__legend" aria-hidden="true"><span></span> 6 cotes à gagner</div>
+        </div>
+
+        <div class="entry-panel">
+          <div class="entry-panel__heading">
+            <span class="step-tag">01 · INSCRIPTION</span>
+            <h2>Entre dans le jeu.</h2>
+            <p>Utilise le nom affiché sur ton compte WhatsApp et les trois derniers chiffres de ton numéro.</p>
+          </div>
+
+          <form id="entry" novalidate>
+            <div class="field">
+              <label for="name">Nom de ton compte WhatsApp</label>
+              <input id="name" name="name" maxlength="50" autocomplete="name" placeholder="Ex. Sanel Chombe" required>
+            </div>
+            <div class="field">
+              <label for="suffix">3 derniers chiffres de ton numéro WhatsApp</label>
+              <input id="suffix" name="suffix" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" autocomplete="off" placeholder="Ex. 482" required>
+            </div>
+            <p class="privacy"><span aria-hidden="true">⌁</span> Nous ne demandons pas ton numéro complet. Ces informations servent à gérer les participations et à limiter les doublons.</p>
+            <button id="spin" type="submit"><span class="button__spark" aria-hidden="true">✦</span><span class="button__label">Lancer la roulette</span><span class="button__arrow" aria-hidden="true">→</span></button>
+          </form>
+
+          <p id="msg" class="message" role="status" aria-live="polite"></p>
+          <div id="result" class="result" hidden aria-live="polite">
+            <span class="result__sparkles" aria-hidden="true">✦ ✦ ✦</span>
+            <small>TA COTE DU JOUR</small>
+            <strong id="points"></strong>
+            <span id="prize"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="how" aria-labelledby="how-title">
+        <div class="section-title">
+          <p class="eyebrow"><span></span> C’est très simple <span></span></p>
+          <h2 id="how-title">Comment participer ?</h2>
+        </div>
+        <div class="steps">
+          <article>
+            <span class="steps__number">01</span>
+            <span class="steps__icon" aria-hidden="true">✎</span>
+            <h3>Identifie-toi</h3>
+            <p>Inscris ton nom WhatsApp et les trois derniers chiffres de ton numéro.</p>
+          </article>
+          <article>
+            <span class="steps__number">02</span>
+            <span class="steps__icon" aria-hidden="true">◎</span>
+            <h3>Lance la roulette</h3>
+            <p>Appuie sur le bouton et laisse la roue sélectionner ta cote.</p>
+          </article>
+          <article>
+            <span class="steps__number">03</span>
+            <span class="steps__icon" aria-hidden="true">✦</span>
+            <h3>Découvre ton gain</h3>
+            <p>Le résultat s’affiche immédiatement. Bonne chance !</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>© Dinice.X Pizza <span>·</span> Challenge officiel</footer>
+    <div id="confetti" class="confetti" aria-hidden="true"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>
