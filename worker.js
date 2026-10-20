@@ -2,7 +2,7 @@ import * as XLSX from "xlsx";
 
 // ===== Réglages =====
 // Adresse secrète de la page des résultats (sans mot de passe)
-const ADMIN = "/tableau";
+const ADMIN = "/resultats-roulette-2026";
 // Cotes de la roue : "weight" = chance relative (tout à 1 = chances égales)
 const PRIZES = [
   { points: 5, weight: 30, text: "Petite cote, mais tu es dans le jeu !" },
