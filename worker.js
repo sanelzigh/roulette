@@ -5,12 +5,12 @@ import * as XLSX from "xlsx";
 const ADMIN = "/resultats-roulette-2026";
 // Cotes de la roue : "weight" = chance relative (tout à 1 = chances égales)
 const PRIZES = [
-  { points: 5,  weight: 30, text: "Petite cote, mais tu es dans le jeu !" },
+  { points: 5, weight: 30, text: "Petite cote, mais tu es dans le jeu !" },
   { points: 10, weight: 25, text: "Belle cote, bien joué !" },
   { points: 15, weight: 20, text: "Très belle cote !" },
   { points: 20, weight: 13, text: "Excellente cote !" },
-  { points: 30, weight: 7,  text: "Superbe cote, félicitations !" },
-  { points: 50, weight: 5,  text: "JACKPOT ! Cote maximale !" }
+  { points: 30, weight: 7, text: "Superbe cote, félicitations !" },
+  { points: 50, weight: 5, text: "JACKPOT ! Cote maximale !" }
 ];
 
 const json = (data, status = 200, headers = {}) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...headers } });
@@ -47,7 +47,7 @@ main{max-width:1100px;margin:auto;padding:20px}
 .bar{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
 .bar input{flex:1;min-width:180px;border:1px solid var(--line);border-radius:12px;padding:13px;font:inherit;background:#fffdf9}
 .btn{display:inline-block;border:0;border-radius:12px;padding:14px 18px;font:800 13px Montserrat;cursor:pointer;text-decoration:none;text-align:center;color:#fff}
-.btn.g{background:var(--green)}.btn.r{background:var(--red)}
+.btn.g{background:var(--green)}.btn.r{background:var(--red)}.btn.k{background:#fff;color:var(--red);border:2px solid var(--red)}.btn:disabled{opacity:.4;cursor:not-allowed}
 .wrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:12px}
 table{border-collapse:collapse;width:100%;font-size:13px;min-width:600px}
 th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;white-space:nowrap}
@@ -55,7 +55,7 @@ th{background:var(--green);color:#fff;position:sticky;top:0;font-weight:700}
 tbody tr:nth-child(even){background:#fbf5ee}
 .jp{color:var(--red);font-weight:800}
 #note{color:var(--muted);font-size:12px}
-</style></head><body><header><div class="logo"><img src="/logo.png" alt="Logo"></div><div><b>DINICE.X PIZZA</b><small>Résultats de la roulette</small></div><span class="tag">ESPACE ADMIN</span></header><main><section class="hero"><small>CONFIDENTIEL</small><h1>RÉSULTATS DE LA <em>ROULETTE</em></h1><p>Consulte les cotes obtenues en direct et télécharge le fichier Excel.</p></section><section class="panel"><h2>Participations</h2><div class="stats" id="stats"></div><div class="bar"><input id="q" placeholder="Rechercher un nom, une cote..."><button class="btn r" id="refresh" type="button">↻ Actualiser</button><a class="btn g" id="xl" href="#">↓ Télécharger Excel (.xlsx)</a></div><div class="wrap"><table><thead><tr><th>ID</th><th>Nom WhatsApp</th><th>3 derniers chiffres</th><th>Cote gagnée (points)</th><th>Date (heure de Bukavu)</th></tr></thead><tbody id="rows"></tbody></table></div><p id="note"></p></section></main><script>
+</style></head><body><header><div class="logo"><img src="/logo.png" alt="Logo"></div><div><b>DINICE.X PIZZA</b><small>Résultats de la roulette</small></div><span class="tag">ESPACE ADMIN</span></header><main><section class="hero"><small>CONFIDENTIEL</small><h1>RÉSULTATS DE LA <em>ROULETTE</em></h1><p>Consulte les cotes obtenues en direct et télécharge le fichier Excel.</p></section><section class="panel"><h2>Participations</h2><div class="stats" id="stats"></div><div class="bar"><input id="q" placeholder="Rechercher un nom, une cote..."><button class="btn r" id="refresh" type="button">↻ Actualiser</button><a class="btn g" id="xl" href="#">↓ Télécharger Excel (.xlsx)</a><button class="btn k" id="reset" type="button" disabled title="Télécharge d'abord le fichier Excel">🗑 Réinitialiser le tableau</button></div><div class="wrap"><table><thead><tr><th>ID</th><th>Nom WhatsApp</th><th>3 derniers chiffres</th><th>Cote gagnée (points)</th><th>Date (heure de Bukavu)</th></tr></thead><tbody id="rows"></tbody></table></div><p id="note"></p></section></main><script>
 var $=function(x){return document.getElementById(x)};
 var base=location.pathname;while(base.length>1&&base.charAt(base.length-1)=="/")base=base.slice(0,-1);
 $("xl").href=base+"/export.xlsx";
@@ -88,6 +88,19 @@ async function load(){
     draw();
   }catch(e){$("note").textContent="Erreur de connexion"}
 }
+$("xl").addEventListener("click",function(){$("reset").disabled=false;$("note").textContent="Excel téléchargé : tu peux maintenant réinitialiser le tableau."});
+$("reset").addEventListener("click",async function(){
+  if(!all.length){alert("Le tableau est déjà vide.");return}
+  var t=prompt("ATTENTION : toutes les participations seront supprimées définitivement. Tape SUPPRIMER pour confirmer.");
+  if(t!=="SUPPRIMER")return;
+  try{
+    var r=await fetch(base+"/reset",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({confirm:"SUPPRIMER"})});
+    if(!r.ok){alert("Échec de la réinitialisation.");return}
+    $("reset").disabled=true;
+    await load();
+    $("note").textContent="Tableau réinitialisé.";
+  }catch(e){alert("Erreur de connexion")}
+});
 $("q").addEventListener("input",draw);
 $("refresh").addEventListener("click",load);
 load();setInterval(load,30000);
@@ -127,6 +140,14 @@ export default { async fetch(request, env) {
       XLSX.utils.book_append_sheet(wb, ws, "Roulette");
       const bytes = XLSX.write(wb, { type: "array", bookType: "xlsx" });
       return new Response(bytes, { headers: { "content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "content-disposition": "attachment; filename=\"DiniceX_Roulette.xlsx\"", "cache-control": "no-store" } });
+    }
+
+    if (path === ADMIN + "/reset" && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      if (body.confirm !== "SUPPRIMER") return json({ error: "Confirmation manquante." }, 400);
+      await env.DB.prepare("DELETE FROM participants").run();
+      try { await env.DB.prepare("DELETE FROM sqlite_sequence WHERE name='participants'").run(); } catch (e) {}
+      return json({ ok: true });
     }
 
     if (path === ADMIN && request.method === "GET") {
