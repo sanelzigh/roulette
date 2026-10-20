@@ -5,12 +5,12 @@ import * as XLSX from "xlsx";
 const ADMIN = "/resultats-roulette-2026";
 // Cotes de la roue : "weight" = chance relative (tout à 1 = chances égales)
 const PRIZES = [
-  { points: 5, weight: 1, text: "Petite cote, mais tu es dans le jeu !" },
-  { points: 10, weight: 1, text: "Belle cote, bien joué !" },
-  { points: 15, weight: 1, text: "Très belle cote !" },
-  { points: 20, weight: 1, text: "Excellente cote !" },
-  { points: 30, weight: 1, text: "Superbe cote, félicitations !" },
-  { points: 50, weight: 1, text: "JACKPOT ! Cote maximale !" }
+  { points: 5,  weight: 30, text: "Petite cote, mais tu es dans le jeu !" },
+  { points: 10, weight: 25, text: "Belle cote, bien joué !" },
+  { points: 15, weight: 20, text: "Très belle cote !" },
+  { points: 20, weight: 13, text: "Excellente cote !" },
+  { points: 30, weight: 7,  text: "Superbe cote, félicitations !" },
+  { points: 50, weight: 5,  text: "JACKPOT ! Cote maximale !" }
 ];
 
 const json = (data, status = 200, headers = {}) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...headers } });
